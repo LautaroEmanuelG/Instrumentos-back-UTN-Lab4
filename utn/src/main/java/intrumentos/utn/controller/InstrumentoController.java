@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/instrumentos")
+@CrossOrigin(origins = "http://localhost:5173")
 public class InstrumentoController {
     @Autowired
     private InstrumentoService service;
