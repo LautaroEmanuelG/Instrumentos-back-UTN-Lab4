@@ -1,45 +1,111 @@
-# Instrumentos-back-UTN-Lab4
+# 🎸 Instrumentos-back-UTN-Lab4
 
-```sql
--- Crear tabla categoria
-CREATE TABLE IF NOT EXISTS categoria (
-idCategoria INT PRIMARY KEY,
-nombre VARCHAR(50) NOT NULL
-);
+API REST para la gestión de instrumentos musicales desarrollada con Spring Boot y MySQL.
 
--- Insertar valores en categoria
-INSERT INTO categoria (idCategoria, nombre) VALUES
-(1, 'Cuerda'),
-(2, 'Viento'),
-(3, 'Percusión'),
-(4, 'Teclado'),
-(5, 'Electrónico');
+## 🚀 Tecnologías utilizadas
 
--- Crear tabla instrumento con relación a categoria
-CREATE TABLE IF NOT EXISTS instrumento (
-id INT PRIMARY KEY,
-instrumento VARCHAR(255),
-marca VARCHAR(255),
-modelo VARCHAR(255),
-imagen VARCHAR(255),
-precio DECIMAL(10,2),
-costoEnvio VARCHAR(10),
-cantidadVendida INT,
-descripcion TEXT,
-idCategoria INT,
-FOREIGN KEY (idCategoria) REFERENCES categoria(idCategoria)
-);
+- **Spring Boot 3.4.4**: Framework para crear aplicaciones Java
+- **Spring Data JPA**: Para la persistencia de datos
+- **MySQL**: Base de datos relacional
+- **Lombok**: Reduce el código repetitivo (getters, setters, constructores)
+- **Maven**: Gestión de dependencias
 
--- Ejemplo de inserción de instrumentos (agrega el idCategoria correspondiente a cada instrumento)
-INSERT INTO instrumento (id, instrumento, marca, modelo, imagen, precio, costoEnvio, cantidadVendida, descripcion, idCategoria) VALUES
-(1,'Mandolina Instrumento Musical Stagg Sunburst','Stagg','M20','nro10.jpg',2450.00,'G',28,'Estas viendo una excelente mandolina de la marca Stagg, con un sonido muy dulce, tapa aros y fondo de tilo, y diapasón de palisandro. Es un instrumento acústico (no se enchufa) de cuerdas dobles (4 pares) con la caja ovalada y cóncava, y el mástil corto. Su utilización abarca variados ámbitos, desde rock, folk, country y ensambles experimentales.',1),
-(2,'Pandereta Pandero Instrumento Musical','DyM ventas','32 sonajas','nro9.jpg',325.00,'150',10,'1 Pandereta - 32 sonajas metálicas. Más de 8 años vendiendo con 100 % de calificaciones POSITIVAS y clientes satisfechos !!',3),
-(3,'Triangulo Musical 24 cm Percusion','LBP','24','nro8.jpg',260.00,'250',3,'Triangulo Musical de 24 Centímetros De Acero. ENVIOS POR CORREO O ENCOMIENDA: Se le deberán adicionar $40 en concepto de Despacho y el Costo del envío se abonará al recibir el producto en Terminal, Sucursal OCA o Domicilio',3),
-(4,'Bar Chimes Lp Cortina Musical 72 Barras','FM','LATIN','nro7.jpg',2250.00,'G',2,'BARCHIME CORTINA MUSICAL DE 25 BARRAS LATIN CUSTOM. Emitimos factura A y B',3),
-(5,'Shekeres. Instrumento. Música. Artesanía.','Azalea Artesanías','Cuentas de madera','nro6.jpg',850.00,'300',5,'Las calabazas utilizadas para nuestras artesanías son sembradas y cosechadas por nosotros, quienes seleccionamos el mejor fruto para garantizar la calidad del producto y ofrecerle algo creativo y original.',3),
-(6,'Antiguo Piano Aleman Con Candelabros.','Neumeyer','Stratus','nro3.jpg',17000.00,'2000',0,'Buen dia! Sale a la venta este Piano Alemán Neumeyer con candelabros incluidos. Tiene una talla muy bonita en la madera. Una pieza de calidad.',4),
-(7,'Guitarra Ukelele Infantil Grande 60cm','GUITARRA','UKELELE','nro4.jpg',500.00,'G',5,'Material: Plástico smil madera 4 Cuerdas longitud: 60cm, el mejor regalo para usted, su familia y amigos, adecuado para 3-18 años de edad',1),
-(8,'Teclado Organo Electronico Musical Instrumento 54 Teclas','GADNIC','T01','nro2.jpg',2250.00,'G',1375,'Organo Electrónico GADNIC T01. Display de Led. 54 Teclas. 100 Timbres / 100 Ritmos. 4 1/2 octavas. 8 Percusiones. 8 Canciones de muestra. Grabación y reproducción. Entrada para Micrófono. Salida de Audio (Auriculares / Amplificador). Vibrato. Sustain Incluye Atril Apoya partitura y Micrófono. Dimensiones: 84,5 x 32,5 x 11 cm',4),
-(9,'Instrumentos De Percusión Niños Set Musical Con Estuche','KNIGHT','LB17','nro1.jpg',2700.00,'300',15,'Estas viendo un excelente y completísimo set de percusion para niños con estuche rígido, equipado con los instrumentos mas divertidos! De gran calidad y sonoridad. Ideal para jardines, escuelas primarias, musicoterapeutas o chicos que se quieran iniciar en la música de la mejor manera. Es un muy buen producto que garantiza entretenimiento en cualquier casa o reunión, ya que esta equipado para que varias personas al mismo tiempo estén tocando un instrumento.',3),
-(10,'Batería Musical Infantil Juguete Niño 9 Piezas Palillos','Bateria','Infantil','nro5.jpg',850.00,'250',380,'DESCRIPCIÓN: DE 1 A 3 AÑOS. EL SET INCLUYE 5 TAMBORES, PALILLOS Y EL PLATILLO TAL CUAL LAS FOTOS. SONIDOS REALISTAS Y FÁCIL DE MONTAR. MEDIDAS: 40X20X46 CM',3);
+## 🔌 Conexión a la base de datos
+
+La aplicación se conecta a una base de datos MySQL. La configuración se encuentra en `application.properties`:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/InstrumentosDB
+spring.datasource.username=root
+spring.datasource.password=root
+spring.jpa.hibernate.ddl-auto=create
 ```
+
+> ⚠️ Cambiar `ddl-auto=create` a `update` después de la primera ejecución para mantener los datos.
+
+## 🌐 Endpoints disponibles
+
+### Categorías
+
+#### GET `/api/categorias`
+
+Retorna todas las categorías.
+
+Ejemplo de respuesta:
+
+```json
+[
+  {
+    "idCategoria": 1,
+    "nombre": "Cuerda"
+  },
+  {
+    "idCategoria": 2,
+    "nombre": "Viento"
+  },
+  {
+    "idCategoria": 3,
+    "nombre": "Percusión"
+  }
+]
+```
+
+#### GET `/api/categorias/{id}`
+
+Retorna una categoría específica.
+
+### Instrumentos
+
+#### GET `/api/instrumentos`
+
+Retorna todos los instrumentos con sus categorías.
+
+Ejemplo de respuesta:
+
+```json
+[
+  {
+    "id": 1,
+    "instrumento": "Mandolina Instrumento Musical Stagg Sunburst",
+    "marca": "Stagg",
+    "modelo": "M20",
+    "imagen": "nro10.jpg",
+    "precio": 2450.0,
+    "costoEnvio": "G",
+    "cantidadVendida": 28,
+    "descripcion": "Estas viendo una excelente mandolina de la marca Stagg...",
+    "categoria": {
+      "idCategoria": 1,
+      "nombre": "Cuerda"
+    }
+  }
+]
+```
+
+#### GET `/api/instrumentos/{id}`
+
+Retorna un instrumento específico.
+
+#### POST `/api/instrumentos`
+
+Crea un nuevo instrumento.
+
+#### PUT `/api/instrumentos/{id}`
+
+Actualiza un instrumento existente.
+
+#### DELETE `/api/instrumentos/{id}`
+
+Elimina un instrumento.
+
+## 🚀 Inicialización de datos
+
+La aplicación inicializa automáticamente la base de datos con categorías e instrumentos la primera vez que se ejecuta.
+
+## 🛠️ Cómo ejecutar el proyecto
+
+1. Clone el repositorio
+2. Configure MySQL y cree una base de datos llamada "InstrumentosDB"
+3. Configure las credenciales en `application.properties`
+4. Ejecute el proyecto con Maven: `mvn spring-boot:run`
+5. La API estará disponible en `http://localhost:8080`
