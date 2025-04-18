@@ -21,6 +21,7 @@ public class Instrumento {
     private double precio;
     private String costoEnvio;
     private Integer cantidadVendida;
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
 
     @ManyToOne(fetch = FetchType.EAGER)
