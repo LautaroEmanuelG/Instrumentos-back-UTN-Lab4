@@ -13,6 +13,11 @@ public class Instrumento {
     private String tipo;
     private double precio;
 
+    // Relación con Categoria
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_categoria")
+    private Categoria categoria;
+
     // Nuevos atributos
     private String marca;
     private String modelo;
@@ -101,5 +106,13 @@ public class Instrumento {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }

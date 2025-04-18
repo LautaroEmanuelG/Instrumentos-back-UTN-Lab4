@@ -5,6 +5,7 @@ import intrumentos.utn.model.Instrumento;
 import intrumentos.utn.service.InstrumentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -21,23 +22,34 @@ public class InstrumentoController {
     }
 
     @GetMapping("/{id}")
-    public Instrumento getById(@PathVariable Long id) {
-        return service.findById(id);
+    public ResponseEntity<Instrumento> getById(@PathVariable Long id) {
+        Instrumento instrumento = service.findById(id);
+        if (instrumento == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(instrumento);
     }
 
     @PostMapping
-    public Instrumento create(@RequestBody Instrumento instrumento) {
-        return service.save(instrumento);
+    public ResponseEntity<Instrumento> create(@RequestBody Instrumento instrumento) {
+        Instrumento saved = service.save(instrumento);
+        return ResponseEntity.ok(saved);
     }
 
     @PutMapping("/{id}")
-    public Instrumento update(@PathVariable Long id, @RequestBody Instrumento instrumento) {
+    public ResponseEntity<Instrumento> update(@PathVariable Long id, @RequestBody Instrumento instrumento) {
         instrumento.setId(id);
-        return service.save(instrumento);
+        Instrumento updated = service.save(instrumento);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        Instrumento instrumento = service.findById(id);
+        if (instrumento == null) {
+            return ResponseEntity.notFound().build();
+        }
         service.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
